@@ -1,0 +1,62 @@
+digraph Validation_Process {
+	rankdir=TB size=10
+	Start [label="Début du processus" shape=ellipse]
+	Inventory [label="Mise à jour de l'inventaire des SI" shape=box]
+	NewSystem [label="Nouveaux systèmes ?" shape=diamond]
+	SystemChange [label="Modifications des systèmes ?" shape=diamond]
+	Validation [label="Validation / Revalidation ?" shape=diamond]
+	Abandoned [label="Systèmes abandonnés ?" shape=diamond]
+	ImpactGMP [label="Détermination de l'impact GMP
+
+Critères:
+1. Partie intégrante d'un équipement.
+2. Surveillance qualité.
+3. Traçabilité produit.
+4. Soumissions réglementaires.
+5. Etiquetage/traçabilité.
+6. Données critiques.
+7. Conformité réglementaire." shape=box]
+	Categorization [label="Catégorisation des risques et criticités
+
+Catégories:
+- Cat. 1: Logiciels d'infrastructure.
+- Cat. 3: Produits standards.
+- Cat. 4: Produits configurés.
+- Cat. 5: Applications personnalisées." shape=box]
+	RiskAssessment [label="Évaluation des risques
+
+Matrice:
+Non complexe / Complexe
+- Critique: Modéré / Élevé
+- Majeure: Modéré / Modéré
+- Mineure: Faible / Modéré." shape=box]
+	ValidationPlan [label="Création du Plan de Validation" shape=box]
+	Qualification [label="Qualification (QI, QO, QP)" shape=box]
+	Testing [label="Tests
+
+- Vérification des calculs.
+- Vérification des protections.
+- Tests aux limites.
+- Sécurité des accès." shape=box]
+	Report [label="Rédaction du rapport de validation" shape=box]
+	Archive [label="Archivage et maintien de l'état validé" shape=ellipse]
+	End [label="Fin du processus" shape=ellipse]
+	Start -> Inventory
+	Inventory -> NewSystem
+	NewSystem -> ImpactGMP [label=Oui]
+	NewSystem -> SystemChange [label=Non]
+	SystemChange -> ImpactGMP [label=Oui]
+	SystemChange -> Validation [label=Non]
+	Validation -> ImpactGMP [label=Oui]
+	Validation -> Abandoned [label=Non]
+	Abandoned -> Categorization [label=Non]
+	Abandoned -> End [label=Oui]
+	ImpactGMP -> Categorization
+	Categorization -> RiskAssessment
+	RiskAssessment -> ValidationPlan
+	ValidationPlan -> Qualification
+	Qualification -> Testing
+	Testing -> Report
+	Report -> Archive
+	Archive -> End
+}
